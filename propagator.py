@@ -25,7 +25,6 @@ elif len(lines) == 2:
     satellite = io.twoline2rv(lines[0], lines[1], earth_gravity.wgs72)
 
 '''
-
 Define the initial and end desired dates for orbit propagation
 It is supposed to get Local Time. Then it is transformed into UTC time to perform the propagation
 
@@ -120,6 +119,3 @@ while date <= date_end_utc:
     print(date)
 
 csvfile.close()
-
-print(date_init_utc)
-print(date_end_utc)
