@@ -33,22 +33,24 @@ NOTE 2: .astimezone take the local time zone defined in the pc
 NOTE 3: Some code may be included to introduce a more 'human-understanding' epoch (YYYY-MM-DD-TT:TT:TT.TTTT)
 '''
 
-# date_init_str = '2020-5-14 00:00:00.00' # Use in case a more human-understanding formulation is desired
+# Use in case a more human-understanding formulation is desired
+# date_init_str = '2020-5-14 00:00:00.00' 
 # date_init = datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
 
-date_init = datetime(2020, 9, 29, 2, 0, 0)  # Define a local initial time
-date_init_utc = date_init.replace(tzinfo=None).astimezone(tz=timezone.utc)  # Initial local time to UTC
+date_init = datetime(2020, 9, 29, 2, 0, 0)                                      # Define a local initial time
+date_init_utc = date_init.replace(tzinfo=None).astimezone(tz=timezone.utc)      # Initial local time to UTC
 
 # date_end_str = '2020-5-14 23:59:59.00'
 # date_end = datetime.strptime(date_end_str, '%Y-%m-%d %H:%M:%S.%f')
 
-date_end = datetime(2020, 9, 30, 2, 0, 0)  # Define a local end time
-date_end_utc = date_end.replace(tzinfo=None).astimezone(tz=timezone.utc)  # End local time to UTC
+date_end = datetime(2020, 9, 30, 2, 0, 0)                                       # Define a local end time
+date_end_utc = date_end.replace(tzinfo=None).astimezone(tz=timezone.utc)        # End local time to UTC
 
 # Initialize the date for the propagation
 date = date_init_utc
 
 # CSV file is created with a header identifying what does each column represent
+
 csvfile = open('/Users/Jose Herrera/Desktop/TFM/SW/TLEs/Global-4/Propagation/sat25544-sept15.csv', 'w', newline='')
 fieldnames = ['Epoch [UTC Time]', 'X [km]', 'Y [km]', 'Z[km]', 'Vx [km/s]', 'Vy [km/s]', 'Vz [km/s]',
               'Latitude [deg]', 'Longitude [deg]', 'Altitude [km]']
@@ -74,7 +76,7 @@ while date <= date_end_utc:
     
     '''
 
-    jdate = ext.jday(date.year, date.month, date.day, date.hour, date.minute, date.second) # Compute Julian Day
+    jdate = ext.jday(date.year, date.month, date.day, date.hour, date.minute, date.second)          # Compute Julian Day
     r_ITRF, v_ITRF = sgp4lib.TEME_to_ITRF(jdate, np.array(r), np.array(v) * 86400)
 
     """
@@ -107,15 +109,14 @@ while date <= date_end_utc:
                      'X [km]': r_ITRF[0],
                      'Y [km]': r_ITRF[1],
                      'Z[km]': r_ITRF[2],
-                     'Vx [km/s]': v_ITRF[0] / 86400,  # TEME_to_ITRF gives velocity in unit/day -> Generate unit/sec
+                     'Vx [km/s]': v_ITRF[0] / 86400,        # TEME_to_ITRF gives velocity in unit/day -> Generate unit/sec
                      'Vy [km/s]': v_ITRF[1] / 86400,
                      'Vz [km/s]': v_ITRF[2] / 86400,
                      'Latitude [deg]': lat,
                      'Longitude [deg]': lon,
-                     'Altitude [km]': height / 10 ** 3})  # Altitude to km
+                     'Altitude [km]': height / 10 ** 3})    # Altitude to km
 
-    # Temporal resolution
-    date = date + timedelta(seconds=1)
+    date = date + timedelta(seconds=1)                      # Temporal resolution
     print(date)
 
 csvfile.close()
